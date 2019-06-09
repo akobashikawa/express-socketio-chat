@@ -1,3 +1,5 @@
+var socket = io();
+
 const app = new Vue({
   el: '#app',
   data: function () {
@@ -18,6 +20,11 @@ const app = new Vue({
       } catch (error) {
         console.log(error);
       }
+    },
+    addMessages: function(message) {
+      this.messages.push(message);
     }
   }
 });
+
+socket.on('message', app.addMessages);

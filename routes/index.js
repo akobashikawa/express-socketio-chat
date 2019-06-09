@@ -7,6 +7,10 @@ const messages = [];
 router.post('/messages', function(req, res, next) {
   const message = req.body.message;
   messages.push(message);
+
+  const io = req.app.get('socketio');
+  io.emit('message', message);
+  
   res.json(messages);
 });
 
