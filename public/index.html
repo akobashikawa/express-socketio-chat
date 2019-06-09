@@ -1,13 +1,43 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Express</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Express Chat</title>
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
 </head>
-
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
-</body>
+  <div id="app">
 
+    <b-container>
+      <h1>Express Chat</h1>
+  
+      <b-form>
+        <b-form-group
+          id="input-group"
+          label="Message"
+          label-for="input-message"
+          description="Write something nice"
+        >
+          <b-form-input
+            id="input-message"
+            type="text"
+            v-model="message"
+            required
+          ></b-form-input>
+        </b-form-group>
+  
+        <b-button type="button" variant="primary" @click="send">Send</b-button>
+      </b-form>
+    </b-container>
+  </div>
+  
+  <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+  <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="module" src="js/app.js"></script>
+</body>
 </html>
