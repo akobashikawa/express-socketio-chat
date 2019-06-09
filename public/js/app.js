@@ -2,7 +2,8 @@ const app = new Vue({
   el: '#app',
   data: function () {
     return {
-      message: ''
+      message: '',
+      messages: []
     };
   },
   methods: {
@@ -13,8 +14,7 @@ const app = new Vue({
       }
       try {
         const aresult = await axios.post(url, data);
-        const result = aresult.data;
-        console.log(result);
+        this.messages = aresult.data;
       } catch (error) {
         console.log(error);
       }
