@@ -17,6 +17,7 @@ const app = new Vue({
       try {
         const aresult = await axios.post(url, data);
         this.messages = aresult.data;
+        this.message = '';
       } catch (error) {
         console.log(error);
       }
