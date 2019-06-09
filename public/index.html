@@ -12,7 +12,9 @@
   <div id="app">
 
     <b-container>
-      <h1>Express Chat</h1>
+      <div class="text-center">
+        <h1>Express Chat</h1>
+      </div>
   
       <b-form>
         <b-form-group
@@ -31,6 +33,10 @@
   
         <b-button type="button" variant="primary" @click="send">Send</b-button>
       </b-form>
+
+      <b-list-group class="mt-2" v-if="messages.length">
+        <b-list-group-item v-for="message of messages.slice().reverse()">{{ message }}</b-list-group-item>
+      </b-list-group>
     </b-container>
   </div>
   
