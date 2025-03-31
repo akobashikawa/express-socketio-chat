@@ -25,22 +25,27 @@
         const greetingMessage = document.getElementById('greetingMessage');
 
         // Definir la función hello
-        function hello() {
-            const name = nameInput.value;
-            const message = name ? `Hola, ${name}!` : 'Hola!';
-            greetingMessage.textContent = message;
+        function sendHello(name) {
+            // const message = name ? `Hola, ${name}!` : 'Hola!';
+            // greetingMessage.textContent = message;
 
             // Enviar el nombre al servidor
             socket.emit('nameSended', name);
         }
 
+        function hello(message) {
+            greetingMessage.textContent = message;
+        }
+
         // Agregar evento al botón
-        greetButton.addEventListener('click', hello);
+        greetButton.addEventListener('click', () => {
+            const name = nameInput.value;
+            sendHello(name); // Pasar el valor del input como argumento
+        });
 
         // Escuchar el evento 'nameReceived' desde el servidor
-        socket.on('nameReceived', (name) => {
-            const message = name ? `Hola, ${name}!` : 'Hola!';
-            greetingMessage.textContent = message;
+        socket.on('nameReceived', (message) => {
+            hello(message);
         });
     </script>
 </body>

@@ -16,10 +16,11 @@ io.on('connection', (socket) => {
     // Escuchar el evento 'nameSended' desde el cliente
     socket.on('nameSended', (name) => {
         console.log(`Nombre recibido: ${name}`);
-        // Emitir el nombre al cliente que lo envió
-        socket.emit('nameReceived', name);
+        const message = `Hola ${name}!`;
         // Emitir el nombre a todos los clientes conectados
-        io.emit('nameReceived', name);
+        io.emit('nameReceived', message);
+        // Emitir el nombre al cliente que lo envió
+        socket.emit('nameReceived', message + '*');
     });
 
     socket.on('disconnect', () => {
