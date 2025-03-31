@@ -14,11 +14,33 @@
     </div>
     <p id="greetingMessage"></p>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        document.getElementById('greetButton').addEventListener('click', function() {
-            const name = document.getElementById('nameInput').value;
+        // Conectar al servidor de Socket.IO
+        const socket = io();
+
+        // Asignar elementos a variables
+        const nameInput = document.getElementById('nameInput');
+        const greetButton = document.getElementById('greetButton');
+        const greetingMessage = document.getElementById('greetingMessage');
+
+        // Definir la función hello
+        function hello() {
+            const name = nameInput.value;
             const message = name ? `Hola, ${name}!` : 'Hola!';
-            document.getElementById('greetingMessage').textContent = message;
+            greetingMessage.textContent = message;
+
+            // Enviar el nombre al servidor
+            socket.emit('nameSended', name);
+        }
+
+        // Agregar evento al botón
+        greetButton.addEventListener('click', hello);
+
+        // Escuchar el evento 'nameReceived' desde el servidor
+        socket.on('nameReceived', (name) => {
+            const message = name ? `Hola, ${name}!` : 'Hola!';
+            greetingMessage.textContent = message;
         });
     </script>
 </body>
