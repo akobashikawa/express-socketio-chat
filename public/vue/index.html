@@ -12,10 +12,10 @@
     <div id="app">
         <h1>Vue SocketIO</h1>
         <div>
-            <input type="text" v-model="name" placeholder="Ingresa tu nombre">
-            <button @click="sendHello">Hola</button>
+            <input type="text" id="nameInput" v-model="name" placeholder="Ingresa tu nombre">
+            <button id="greetButton" @click="sendHello">Hola</button>
         </div>
-        <p>{{ greetingMessage }}</p>
+        <p id="greetingMessage">{{ greetingMessage }}</p>
     </div>
 
     <script>
