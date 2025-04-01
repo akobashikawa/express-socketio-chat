@@ -6,9 +6,9 @@ function handleNameSended(socket, io) {
         const message = generateMessage(name); // Usar el servicio para generar el mensaje
         console.log(`Mensaje a enviar: ${message}`);
         // Emitir el nombre a todos los clientes conectados
-        io.emit('nameReceived', message);
+        io.emit('nameReceived', 'broadcast: ' + message);
         // Emitir el nombre al cliente que lo envió
-        socket.emit('nameReceived', message + '*');
+        socket.emit('nameReceived', 'privado: ' + message);
     };
 }
 

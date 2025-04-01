@@ -15,7 +15,9 @@
             <input type="text" id="nameInput" v-model="name" placeholder="Ingresa tu nombre">
             <button id="greetButton" @click="sendHello">Hola</button>
         </div>
-        <p id="greetingMessage">{{ greetingMessage }}</p>
+        <ul>
+            <li v-for="(message, index) in greetingMessages" :key="index">{{ message }}</li>
+        </ul>
     </div>
 
     <script>
@@ -25,7 +27,7 @@
             data() {
                 return {
                     name: '', // Nombre ingresado por el usuario
-                    greetingMessage: '' // Mensaje de saludo recibido del servidor
+                    greetingMessages: [] // Lista de mensajes de saludo
                 };
             },
             methods: {
@@ -37,7 +39,7 @@
             mounted() {
                 // Escuchar el evento 'nameReceived' desde el servidor
                 socket.on('nameReceived', (message) => {
-                    this.greetingMessage = message;
+                    this.greetingMessages.push(message); // Agregar el mensaje a la lista
                 });
             }
         });

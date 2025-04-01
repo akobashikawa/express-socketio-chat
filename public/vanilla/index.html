@@ -12,7 +12,7 @@
         <input type="text" id="nameInput" placeholder="Ingresa tu nombre">
         <button id="greetButton">Hola</button>
     </div>
-    <p id="greetingMessage"></p>
+    <ul id="greetingMessages"></ul> <!-- Lista para los mensajes -->
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -22,19 +22,19 @@
         // Asignar elementos a variables
         const nameInput = document.getElementById('nameInput');
         const greetButton = document.getElementById('greetButton');
-        const greetingMessage = document.getElementById('greetingMessage');
+        const greetingMessages = document.getElementById('greetingMessages'); // Lista de mensajes
 
-        // Definir la función hello
+        // Definir la función para enviar el nombre
         function sendHello(name) {
-            // const message = name ? `Hola, ${name}!` : 'Hola!';
-            // greetingMessage.textContent = message;
-
             // Enviar el nombre al servidor
             socket.emit('nameSended', name);
         }
 
-        function hello(message) {
-            greetingMessage.textContent = message;
+        // Definir la función para agregar un mensaje a la lista
+        function addGreetingMessage(message) {
+            const listItem = document.createElement('li'); // Crear un nuevo elemento <li>
+            listItem.textContent = message; // Asignar el mensaje como texto
+            greetingMessages.appendChild(listItem); // Agregar el <li> a la lista
         }
 
         // Agregar evento al botón
@@ -45,7 +45,7 @@
 
         // Escuchar el evento 'nameReceived' desde el servidor
         socket.on('nameReceived', (message) => {
-            hello(message);
+            addGreetingMessage(message); // Agregar el mensaje a la lista
         });
     </script>
 </body>
