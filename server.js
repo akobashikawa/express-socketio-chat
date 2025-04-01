@@ -17,6 +17,7 @@ io.on('connection', (socket) => {
     socket.on('nameSended', (name) => {
         console.log(`Nombre recibido: ${name}`);
         const message = `Hola ${name}!`;
+        console.log(`Mensaje a enviar: ${message}`);
         // Emitir el nombre a todos los clientes conectados
         io.emit('nameReceived', message);
         // Emitir el nombre al cliente que lo envió
