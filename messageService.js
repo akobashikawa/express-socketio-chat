@@ -1,5 +1,5 @@
-function generateMessage(name) {
-    return name ? `Hola ${name}!` : 'Hola!';
+function generateMessage(message) {
+    return message;
 }
 
 module.exports = {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta message="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanilla SocketIO</title>
     <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
     <style>
@@ -15,10 +15,10 @@
 <body>
     <h1>Vanilla SocketIO</h1>
     <div>
-        <input type="text" id="nameInput" placeholder="Ingresa tu nombre">
-        <button id="greetButton">Hola</button>
+        <input type="text" id="messageInput" placeholder="Ingresa un mensaje">
+        <button id="sendButton">Enviar</button>
     </div>
-    <ul id="greetingMessages"></ul> <!-- Lista para los mensajes -->
+    <ul id="receivedMessages"></ul> <!-- Lista para los mensajes -->
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -27,9 +27,9 @@
         let clientId = null; // Variable para almacenar el ID del cliente
 
         // Asignar elementos a variables
-        const nameInput = document.getElementById('nameInput');
-        const greetButton = document.getElementById('greetButton');
-        const greetingMessages = document.getElementById('greetingMessages'); // Lista de mensajes
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const receivedMessages = document.getElementById('receivedMessages'); // Lista de mensajes
 
         // Obtener el ID del cliente al conectarse
         socket.on('connect', () => {
@@ -37,41 +37,41 @@
         });
 
         // Definir la función para enviar el nombre
-        function sendHello(name) {
-            if (name.trim() !== '') { // Evitar enviar mensajes vacíos
-                socket.emit('nameSended', name);
-                nameInput.value = ''; // Limpiar el campo de texto después de enviar
+        function sendMessage(message) {
+            if (message.trim() !== '') { // Evitar enviar mensajes vacíos
+                socket.emit('messageSent', message);
+                messageInput.value = ''; // Limpiar el campo de texto después de enviar
             }
         }
 
         // Definir la función para agregar un mensaje a la lista
-        function addGreetingMessage(message, isSender) {
+        function addReceivedMessage(message, isSender) {
             const listItem = document.createElement('li'); // Crear un nuevo elemento <li>
             listItem.textContent = message; // Asignar el texto del mensaje
             if (isSender) {
                 listItem.classList.add('mine'); // Agregar la clase 'mine' si es un mensaje propio
             }
-            greetingMessages.appendChild(listItem); // Agregar el <li> a la lista
+            receivedMessages.appendChild(listItem); // Agregar el <li> a la lista
         }
 
         // Agregar evento al botón
-        greetButton.addEventListener('click', () => {
-            const name = nameInput.value;
-            sendHello(name); // Pasar el valor del input como argumento
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            sendMessage(message); // Pasar el valor del input como argumento
         });
 
         // Agregar evento al input para detectar la tecla Enter
-        nameInput.addEventListener('keydown', (event) => {
+        messageInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') { // Verificar si la tecla presionada es Enter
-                const name = nameInput.value;
-                sendHello(name); // Pasar el valor del input como argumento
+                const message = messageInput.value;
+                sendMessage(message); // Pasar el valor del input como argumento
             }
         });
 
-        // Escuchar el evento 'nameReceived' desde el servidor
-        socket.on('nameReceived', ({ message, senderId }) => {
+        // Escuchar el evento 'messageReceived' desde el servidor
+        socket.on('messageReceived', ({ message, senderId }) => {
             const isSender = senderId === clientId; // Comparar el ID del emisor con el ID del cliente
-            addGreetingMessage(message, isSender); // Agregar el mensaje a la lista
+            addReceivedMessage(message, isSender); // Agregar el mensaje a la lista
         });
     </script>
 </body>

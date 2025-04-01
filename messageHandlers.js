@@ -1,17 +1,17 @@
 const { generateMessage } = require('./messageService'); // Importar el servicio
 
-function handleNameSended(socket, io) {
+function handleMessageSent(socket, io) {
     return (name) => {
         console.log(`Nombre recibido: ${name}`);
         const message = generateMessage(name); // Usar el servicio para generar el mensaje
         console.log(`Mensaje a enviar: ${message}`);
         // Emitir el mensaje a todos los clientes conectados, incluyendo el senderId
-        io.emit('nameReceived', { message, senderId: socket.id });
+        io.emit('messageReceived', { message, senderId: socket.id });
         // Emitir el nombre solo al cliente que lo envió
-        // socket.emit('nameReceived', message);
+        // socket.emit('messageReceived', message);
     };
 }
 
 module.exports = {
-    handleNameSended,
+    handleMessageSent,
 };

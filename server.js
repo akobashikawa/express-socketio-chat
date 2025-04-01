@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const { handleNameSended } = require('./holaHandlers'); // Importar el controlador
+const { handleMessageSent } = require('./messageHandlers'); // Importar el controlador
 
 const app = express();
 const server = http.createServer(app);
@@ -14,8 +14,8 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', (socket) => {
     console.log('Un cliente se ha conectado');
 
-    // Usar el controlador para manejar 'nameSended'
-    socket.on('nameSended', handleNameSended(socket, io));
+    // Usar el controlador para manejar 'messageSent'
+    socket.on('messageSent', handleMessageSent(socket, io));
 
     socket.on('disconnect', () => {
         console.log('Un cliente se ha desconectado');
