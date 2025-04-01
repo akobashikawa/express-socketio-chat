@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
     <script src="https://unpkg.com/vue@3"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <style>
+        /* Estilo para los mensajes propios */
+        .mine {
+            text-align: right; /* Alinear a la derecha */
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -22,7 +28,13 @@
             <button id="greetButton" @click="sendHello">Hola</button>
         </div>
         <ul id="greetingMessages">
-            <li v-for="(message, index) in greetingMessages" :key="index">{{ message }}</li>
+            <li 
+                v-for="(message, index) in greetingMessages" 
+                :key="index" 
+                :class="{ mine: message.isSender }"
+            >
+                {{ message.text }}
+            </li>
         </ul>
     </div>
 
@@ -46,11 +58,8 @@
                     }
                 },
                 addGreetingMessage(message, isSender) {
-                    // Diferenciar entre mensajes privados y broadcast
-                    const formattedMessage = isSender
-                        ? `${message} (mío)`
-                        : `${message}`;
-                    this.greetingMessages.push(formattedMessage); // Agregar el mensaje a la lista
+                    // Agregar el mensaje a la lista con información sobre si es propio
+                    this.greetingMessages.push({ text: message, isSender });
                 }
             },
             mounted() {

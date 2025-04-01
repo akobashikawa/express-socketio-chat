@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanilla SocketIO</title>
     <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
+    <style>
+        /* Estilo para los mensajes propios */
+        .mine {
+            text-align: right; /* Alinear a la derecha */
+        }
+    </style>
 </head>
 <body>
     <h1>Vanilla SocketIO</h1>
@@ -41,7 +47,10 @@
         // Definir la función para agregar un mensaje a la lista
         function addGreetingMessage(message, isSender) {
             const listItem = document.createElement('li'); // Crear un nuevo elemento <li>
-            listItem.textContent = isSender ? `${message} (mío)` : `${message}`; // Diferenciar mensajes
+            listItem.textContent = message; // Asignar el texto del mensaje
+            if (isSender) {
+                listItem.classList.add('mine'); // Agregar la clase 'mine' si es un mensaje propio
+            }
             greetingMessages.appendChild(listItem); // Agregar el <li> a la lista
         }
 
