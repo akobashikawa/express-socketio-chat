@@ -12,10 +12,16 @@
     <div id="app">
         <h1>Vue SocketIO</h1>
         <div>
-            <input type="text" id="nameInput" v-model="name" placeholder="Ingresa tu nombre">
+            <input 
+                type="text" 
+                id="nameInput" 
+                v-model="name" 
+                placeholder="Ingresa tu nombre" 
+                @keydown.enter="sendHello"
+            >
             <button id="greetButton" @click="sendHello">Hola</button>
         </div>
-        <ul>
+        <ul id="greetingMessages">
             <li v-for="(message, index) in greetingMessages" :key="index">{{ message }}</li>
         </ul>
     </div>
@@ -27,19 +33,36 @@
             data() {
                 return {
                     name: '', // Nombre ingresado por el usuario
-                    greetingMessages: [] // Lista de mensajes de saludo
+                    greetingMessages: [], // Lista de mensajes de saludo
+                    clientId: null // ID del cliente actual
                 };
             },
             methods: {
                 sendHello() {
-                    // Enviar el nombre al servidor
-                    socket.emit('nameSended', this.name);
+                    if (this.name.trim() !== '') { // Evitar enviar mensajes vacíos
+                        // Enviar el nombre al servidor
+                        socket.emit('nameSended', this.name);
+                        this.name = ''; // Limpiar el campo de texto después de enviar
+                    }
+                },
+                addGreetingMessage(message, isSender) {
+                    // Diferenciar entre mensajes privados y broadcast
+                    const formattedMessage = isSender
+                        ? `${message} (mío)`
+                        : `${message}`;
+                    this.greetingMessages.push(formattedMessage); // Agregar el mensaje a la lista
                 }
             },
             mounted() {
+                // Obtener el ID del cliente al conectarse
+                socket.on('connect', () => {
+                    this.clientId = socket.id; // Guardar el ID del cliente
+                });
+
                 // Escuchar el evento 'nameReceived' desde el servidor
-                socket.on('nameReceived', (message) => {
-                    this.greetingMessages.push(message); // Agregar el mensaje a la lista
+                socket.on('nameReceived', ({ message, senderId }) => {
+                    const isSender = senderId === this.clientId; // Comparar el ID del emisor con el ID del cliente
+                    this.addGreetingMessage(message, isSender); // Agregar el mensaje a la lista
                 });
             }
         });

@@ -18,22 +18,30 @@
     <script>
         // Conectar al servidor de Socket.IO
         const socket = io();
+        let clientId = null; // Variable para almacenar el ID del cliente
 
         // Asignar elementos a variables
         const nameInput = document.getElementById('nameInput');
         const greetButton = document.getElementById('greetButton');
         const greetingMessages = document.getElementById('greetingMessages'); // Lista de mensajes
 
+        // Obtener el ID del cliente al conectarse
+        socket.on('connect', () => {
+            clientId = socket.id; // Guardar el ID del cliente
+        });
+
         // Definir la función para enviar el nombre
         function sendHello(name) {
-            // Enviar el nombre al servidor
-            socket.emit('nameSended', name);
+            if (name.trim() !== '') { // Evitar enviar mensajes vacíos
+                socket.emit('nameSended', name);
+                nameInput.value = ''; // Limpiar el campo de texto después de enviar
+            }
         }
 
         // Definir la función para agregar un mensaje a la lista
-        function addGreetingMessage(message) {
+        function addGreetingMessage(message, isSender) {
             const listItem = document.createElement('li'); // Crear un nuevo elemento <li>
-            listItem.textContent = message; // Asignar el mensaje como texto
+            listItem.textContent = isSender ? `${message} (mío)` : `${message}`; // Diferenciar mensajes
             greetingMessages.appendChild(listItem); // Agregar el <li> a la lista
         }
 
@@ -43,9 +51,18 @@
             sendHello(name); // Pasar el valor del input como argumento
         });
 
+        // Agregar evento al input para detectar la tecla Enter
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') { // Verificar si la tecla presionada es Enter
+                const name = nameInput.value;
+                sendHello(name); // Pasar el valor del input como argumento
+            }
+        });
+
         // Escuchar el evento 'nameReceived' desde el servidor
-        socket.on('nameReceived', (message) => {
-            addGreetingMessage(message); // Agregar el mensaje a la lista
+        socket.on('nameReceived', ({ message, senderId }) => {
+            const isSender = senderId === clientId; // Comparar el ID del emisor con el ID del cliente
+            addGreetingMessage(message, isSender); // Agregar el mensaje a la lista
         });
     </script>
 </body>

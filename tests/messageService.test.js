@@ -6,7 +6,7 @@ describe('generateMessage', () => {
         expect(generateMessage('')).toBe('Hola!');
     });
 
-    it('debería devolver "Hola, [nombre]!" si se proporciona un nombre', () => {
+    it('debería devolver "Hola [nombre]!" si se proporciona un nombre', () => {
         expect(generateMessage('Juan')).toBe('Hola Juan!');
     });
 });
