@@ -32,6 +32,7 @@
                 v-for="(message, index) in receivedMessages" 
                 :key="index" 
                 :class="{ mine: message.isSender }"
+                :style="{ color: message.color }"
             >
                 {{ message.text }}
             </li>
@@ -57,9 +58,23 @@
                         this.message = ''; // Limpiar el campo de texto después de enviar
                     }
                 },
-                addReceivedMessage(message, isSender) {
-                    // Agregar el mensaje a la lista con información sobre si es propio
-                    this.receivedMessages.push({ text: message, isSender });
+                addReceivedMessage(message, isSender, senderId) {
+                    // Generar un color único basado en el senderId
+                    const color = isSender ? 'black' : this.generateColorFromId(senderId);
+                    // Agregar el mensaje a la lista con información sobre si es propio y su color
+                    this.receivedMessages.push({ 
+                        text: isSender ? message : `${message} (from ${senderId})`, 
+                        isSender, 
+                        color 
+                    });
+                },
+                generateColorFromId(id) {
+                    let hash = 0;
+                    for (let i = 0; i < id.length; i++) {
+                        hash = id.charCodeAt(i) + ((hash << 5) - hash); // Generar un hash numérico
+                    }
+                    const color = `#${((hash >> 24) & 0xff).toString(16).padStart(2, '0')}${((hash >> 16) & 0xff).toString(16).padStart(2, '0')}${((hash >> 8) & 0xff).toString(16).padStart(2, '0')}`;
+                    return color.slice(0, 7); // Asegurarse de que sea un color válido en formato #rrggbb
                 }
             },
             mounted() {
@@ -71,7 +86,7 @@
                 // Escuchar el evento 'messageReceived' desde el servidor
                 socket.on('messageReceived', ({ message, senderId }) => {
                     const isSender = senderId === this.clientId; // Comparar el ID del emisor con el ID del cliente
-                    this.addReceivedMessage(message, isSender); // Agregar el mensaje a la lista
+                    this.addReceivedMessage(message, isSender, senderId); // Agregar el mensaje a la lista
                 });
             }
         });

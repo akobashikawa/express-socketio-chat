@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta message="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanilla SocketIO</title>
     <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
     <style>
@@ -36,7 +36,17 @@
             clientId = socket.id; // Guardar el ID del cliente
         });
 
-        // Definir la función para enviar el nombre
+        // Función para generar un color único basado en el clientId
+        function generateColorFromId(id) {
+            let hash = 0;
+            for (let i = 0; i < id.length; i++) {
+                hash = id.charCodeAt(i) + ((hash << 5) - hash); // Generar un hash numérico
+            }
+            const color = `#${((hash >> 24) & 0xff).toString(16).padStart(2, '0')}${((hash >> 16) & 0xff).toString(16).padStart(2, '0')}${((hash >> 8) & 0xff).toString(16).padStart(2, '0')}`;
+            return color.slice(0, 7); // Asegurarse de que sea un color válido en formato #rrggbb
+        }
+
+        // Definir la función para enviar el mensaje
         function sendMessage(message) {
             if (message.trim() !== '') { // Evitar enviar mensajes vacíos
                 socket.emit('messageSent', message);
@@ -45,11 +55,15 @@
         }
 
         // Definir la función para agregar un mensaje a la lista
-        function addReceivedMessage(message, isSender) {
+        function addReceivedMessage(message, isSender, senderId) {
             const listItem = document.createElement('li'); // Crear un nuevo elemento <li>
-            listItem.textContent = message; // Asignar el texto del mensaje
+            const color = generateColorFromId(senderId); // Generar un color único basado en el senderId
             if (isSender) {
+                listItem.textContent = message; // Mensaje propio
                 listItem.classList.add('mine'); // Agregar la clase 'mine' si es un mensaje propio
+            } else {
+                listItem.textContent = `${message} (from ${senderId})`; // Mensaje de otro cliente con su clientId
+                listItem.style.color = color; // Aplicar el color único al mensaje
             }
             receivedMessages.appendChild(listItem); // Agregar el <li> a la lista
         }
@@ -71,7 +85,7 @@
         // Escuchar el evento 'messageReceived' desde el servidor
         socket.on('messageReceived', ({ message, senderId }) => {
             const isSender = senderId === clientId; // Comparar el ID del emisor con el ID del cliente
-            addReceivedMessage(message, isSender); // Agregar el mensaje a la lista
+            addReceivedMessage(message, isSender, senderId); // Agregar el mensaje a la lista
         });
     </script>
 </body>
