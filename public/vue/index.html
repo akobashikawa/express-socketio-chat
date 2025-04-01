@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue SocketIO</title>
+    <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Vue SocketIO</h1>
+        <div>
+            <input type="text" v-model="name" placeholder="Ingresa tu nombre">
+            <button @click="sendHello">Hola</button>
+        </div>
+        <p>{{ greetingMessage }}</p>
+    </div>
+
+    <script>
+        const socket = io();
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    name: '', // Nombre ingresado por el usuario
+                    greetingMessage: '' // Mensaje de saludo recibido del servidor
+                };
+            },
+            methods: {
+                sendHello() {
+                    // Enviar el nombre al servidor
+                    socket.emit('nameSended', this.name);
+                }
+            },
+            mounted() {
+                // Escuchar el evento 'nameReceived' desde el servidor
+                socket.on('nameReceived', (message) => {
+                    this.greetingMessage = message;
+                });
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
