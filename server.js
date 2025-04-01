@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // Servir archivos estáticos (como index.html)
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/public'));
 
 // Manejar conexiones de Socket.IO
 io.on('connection', (socket) => {
