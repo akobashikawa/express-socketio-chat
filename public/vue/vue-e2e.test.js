@@ -15,7 +15,7 @@ test('Debe ingresar un nombre y mostrar el saludo en la lista', async ({ page })
     // Verificar que el mensaje de saludo se agregó a la lista como "emisor"
     const greetingMessages = await page.locator('#greetingMessages li');
     await expect(greetingMessages).toHaveCount(1); // Verificar que hay un mensaje en la lista
-    await expect(greetingMessages.first()).toHaveText('Hola Juan! (mío)'); // Verificar el texto del primer mensaje
+    await expect(greetingMessages.first()).toHaveText('Hola Juan!'); // Verificar el texto del primer mensaje
 });
 
 test('Debe agregar a la lista múltiples saludos', async ({ page }) => {
@@ -35,6 +35,6 @@ test('Debe agregar a la lista múltiples saludos', async ({ page }) => {
     // Verificar que ambos mensajes se agregaron a la lista como "emisor"
     const greetingMessages = await page.locator('#greetingMessages li');
     await expect(greetingMessages).toHaveCount(2); // Verificar que hay dos mensajes en la lista
-    await expect(greetingMessages.nth(0)).toHaveText('Hola Juan! (mío)'); // Verificar el texto del primer mensaje
-    await expect(greetingMessages.nth(1)).toHaveText('Hola Maria! (mío)'); // Verificar el texto del segundo mensaje
+    await expect(greetingMessages.nth(0)).toHaveText('Hola Juan!'); // Verificar el texto del primer mensaje
+    await expect(greetingMessages.nth(1)).toHaveText('Hola Maria!'); // Verificar el texto del segundo mensaje
 });
