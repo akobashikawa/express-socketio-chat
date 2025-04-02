@@ -1,3 +1,3 @@
 # SocketIO Chat
 
-- Practicando con socketIO con express, vanilla js y vue.
+- Practicando con socketIO con express, vanilla js, vue simple, angular.
