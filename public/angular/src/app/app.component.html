@@ -6,9 +6,9 @@
   <div class="content">
     <h1>Angular SocketIO</h1>
     <div>
-      <input type="text" placeholder="Ingresa un mensaje"  />
+      <input type="text" placeholder="Ingresa un mensaje" [(ngModel)]="message" (keydown.enter)="sendMessage()" />
     </div>
-    <button>Enviar</button>
+    <button (click)="sendMessage()">Enviar</button>
   </div>
 </main>
 
