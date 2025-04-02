@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { generateMessage } from '../messageService';
 
 describe('generateMessage', () => {
-    it('debería devolver "Hola!" si no se proporciona un nombre', () => {
-        expect(generateMessage('')).toBe('Hola!');
+    it('debería devolver "" si no se proporciona un mensaje', () => {
+        expect(generateMessage('')).toBe('');
     });
 
-    it('debería devolver "Hola [nombre]!" si se proporciona un nombre', () => {
-        expect(generateMessage('Juan')).toBe('Hola Juan!');
+    it('debería devolver el mensaje si se proporciona un mensaje', () => {
+        expect(generateMessage('Hola Mundo!')).toBe('Hola Mundo!');
     });
 });

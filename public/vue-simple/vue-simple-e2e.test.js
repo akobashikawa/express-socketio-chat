@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
-test('Debe ingresar un nombre y mostrar el saludo en la lista', async ({ page }) => {
+test('Debe ingresar un mensaje y mostrarlo en la lista', async ({ page }) => {
     // Navegar a la página
-    await page.goto('http://localhost:3000/vue/index.html');
+    await page.goto('http://localhost:3000/vue-simple/index.html');
 
     // Seleccionar el campo de texto y escribir "Juan"
     const messageInput = await page.locator('#messageInput');
@@ -12,15 +12,15 @@ test('Debe ingresar un nombre y mostrar el saludo en la lista', async ({ page })
     const sendButton = await page.locator('#sendButton');
     await sendButton.click();
 
-    // Verificar que el mensaje de saludo se agregó a la lista como "emisor"
+    // Verificar que el mensaje se agregó a la lista como "emisor"
     const receivedMessages = await page.locator('#receivedMessages li');
     await expect(receivedMessages).toHaveCount(1); // Verificar que hay un mensaje en la lista
     await expect(receivedMessages.first()).toHaveText('Hola Juan'); // Verificar el texto del primer mensaje
 });
 
-test('Debe agregar a la lista múltiples saludos', async ({ page }) => {
+test('Debe agregar a la lista múltiples mensajes', async ({ page }) => {
     // Navegar a la página
-    await page.goto('http://localhost:3000/vue/index.html');
+    await page.goto('http://localhost:3000/vue-simple/index.html');
 
     // Enviar el primer nombre
     const messageInput = await page.locator('#messageInput');
@@ -41,7 +41,7 @@ test('Debe agregar a la lista múltiples saludos', async ({ page }) => {
 
 test('Debe ingresar un mensaje y mostrarlo en la lista como propio', async ({ page }) => {
     // Navegar a la página
-    await page.goto('http://localhost:3000/vue/index.html');
+    await page.goto('http://localhost:3000/vue-simple/index.html');
 
     // Seleccionar el campo de texto y escribir "Hola Juan"
     const messageInput = await page.locator('#messageInput');
@@ -60,7 +60,7 @@ test('Debe ingresar un mensaje y mostrarlo en la lista como propio', async ({ pa
 
 test('Debe agregar múltiples mensajes a la lista como propios', async ({ page }) => {
     // Navegar a la página
-    await page.goto('http://localhost:3000/vue/index.html');
+    await page.goto('http://localhost:3000/vue-simple/index.html');
 
     // Enviar el primer mensaje
     const messageInput = await page.locator('#messageInput');
@@ -90,8 +90,8 @@ test('Debe mostrar mensajes de otros clientes con su clientId', async ({ page, b
     const page2 = await context2.newPage();
 
     // Navegar a la página en ambos contextos
-    await page1.goto('http://localhost:3000/vue/index.html');
-    await page2.goto('http://localhost:3000/vue/index.html');
+    await page1.goto('http://localhost:3000/vue-simple/index.html');
+    await page2.goto('http://localhost:3000/vue-simple/index.html');
 
     // Obtener el clientId del segundo cliente
     const clientId2 = await page2.evaluate(() => socket.id);
