@@ -94,7 +94,8 @@ test('Debe mostrar mensajes de otros clientes con su clientId', async ({ page, b
     await page2.goto('http://localhost:3000/vue-simple/index.html');
 
     // Obtener el clientId del segundo cliente
-    const clientId2 = await page2.evaluate(() => socket.id);
+    // const clientId2 = await page2.evaluate(() => socket.id);
+    const clientId2 = await page2.waitForFunction(() => socket.id);// safer
 
     // Enviar un mensaje desde el segundo cliente
     const messageInput2 = await page2.locator('#messageInput');
