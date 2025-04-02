@@ -1,5 +1,9 @@
 <style>
-  
+  /* Estilo para los mensajes propios */
+  .mine {
+    text-align: right;
+    /* Alinear a la derecha */
+  }
 </style>
 
 <main class="main">
@@ -10,6 +14,12 @@
     </div>
     <button (click)="sendMessage()">Enviar</button>
   </div>
+
+  <ul class="received-messages">
+    <li *ngFor="let msg of receivedMessages" [ngClass]="{ 'mine': msg?.isSender }" [ngStyle]="{ color: msg?.color }">
+      {{ msg?.text }}
+    </li>
+  </ul>
 </main>
 
 <router-outlet />
